@@ -16,30 +16,28 @@ def weight_variable(shape):
 def bias_variable(shape):
 	initial = tf.constant(0.1, shape=shape)
 	return tf.Variable(initial)
-
-
-with tf.device('/gpu:0'):
-	sess = tf.InteractiveSession()
-
-	x = tf.placeholder("float", shape=[None, 4])
-	y_ = tf.placeholder("float", shape=[None, 2])
-
-	W_fc1 = weight_variable([4, 20])
-	b_fc1 = bias_variable([20])
-	h_fc1 = tf.nn.relu(tf.matmul(x, W_fc1) + b_fc1)
 	
-	W_fc2 = weight_variable([20, 20])
-	b_fc2 = bias_variable([20])
-	h_fc2 = tf.nn.relu(tf.matmul(h_fc1, W_fc2) + b_fc2)
 
-	W_fc3 = weight_variable([20, 2])
-	b_fc3 = bias_variable([2])
-	y_out = tf.matmul(h_fc2, W_fc3) + b_fc3
-	
-	loss = tf.reduce_sum(tf.square(y_ - y_out))
-	train_step = tf.train.GradientDescentOptimizer(1e-3).minimize(loss)
-	sess.run(tf.global_variables_initializer())
-	
+sess = tf.InteractiveSession()
+
+x = tf.placeholder("float", shape=[None, 4])
+y_ = tf.placeholder("float", shape=[None, 2])
+
+W_fc1 = weight_variable([4, 20])
+b_fc1 = bias_variable([20])
+h_fc1 = tf.nn.relu(tf.matmul(x, W_fc1) + b_fc1)
+
+W_fc2 = weight_variable([20, 20])
+b_fc2 = bias_variable([20])
+h_fc2 = tf.nn.relu(tf.matmul(h_fc1, W_fc2) + b_fc2)
+
+W_fc3 = weight_variable([20, 2])
+b_fc3 = bias_variable([2])
+y_out = tf.matmul(h_fc2, W_fc3) + b_fc3
+
+loss = tf.reduce_sum(tf.square(y_ - y_out))
+train_step = tf.train.GradientDescentOptimizer(1e-3).minimize(loss)
+sess.run(tf.global_variables_initializer())
 	
 Epsilon = 0
 
@@ -92,7 +90,7 @@ def remember(data):
 		del mem[0]
 
 env = gym.make('CartPole-v0')
-env = gym.wrappers.Monitor(env, '/home/alanmain/Reinforcement_Learning/out/cartpole-q')
+env = gym.wrappers.Monitor(env, '/Users/shrutipatel/Desktop/cartpole-q')
 max_iter = 400
 for i_episode in range(max_iter):
 	Epsilon += (1.5 / max_iter)
@@ -113,8 +111,8 @@ for i_episode in range(max_iter):
 			
 		observation = copy.copy(new_observation)
 		if done:
-			print "Epsilon: ", Epsilon
-			print "Episode ", i_episode, "/", str(max_iter), " finished after ", t+1, " timesteps"
+			print( "Epsilon: ", Epsilon)
+			print( "Episode ", i_episode, "/", str(max_iter), " finished after ", t+1, " timesteps")
 			break
             
 	
